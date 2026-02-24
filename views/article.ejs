@@ -33,7 +33,13 @@
                 <%- article.aiSummary.replace(/\n/g, '<br>') %>
             </div>
             <div class="mt-8 pt-4 border-t dark:border-gray-700 text-sm text-gray-500">
-                Source: <a href="<%= article.desktopUrl %>" target="_blank" class="text-blue-600 hover:underline">Wikipedia</a>
+                Sources:
+                <a href="<%= article.desktopUrl %>" target="_blank" class="text-blue-600 hover:underline">Wikipedia</a><% if (article.sources && article.sources.length > 0) { %><% article.sources.forEach(source => { %>,
+                <a href="<%= source.url %>" target="_blank" class="text-blue-600 hover:underline">
+                    <%= source.title %>
+                </a>
+                <% }) %>
+                <% } %>
             </div>
         </article>
 
