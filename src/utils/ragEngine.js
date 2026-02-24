@@ -2,6 +2,9 @@ const wikipediaService = require('../services/wikipediaService');
 const searchService = require('../services/searchService');
 const scraperService = require('../services/scraperService');
 const ollamaService = require('../services/ollamaService');
+const { marked } = require('marked');
+const createDOMPurify = require('isomorphic-dompurify');
+const DOMPurify = createDOMPurify();
 require('dotenv').config();
 
 const MODEL_FACT_CHECK = process.env.MODEL_FACT_CHECK || 'qwen3:4b';
@@ -70,10 +73,14 @@ async function processArticle(title) {
         console.warn("Summary generation failed:", e.message);
     }
 
+    // 6. Parse Markdown and Sanitize HTML
+    const sanitizedSummary = DOMPurify.sanitize(marked.parse(aiSummary));
+    const sanitizedFactCheck = DOMPurify.sanitize(marked.parse(factCheckResults));
+
     return {
         ...article,
-        factCheck: factCheckResults,
-        aiSummary: aiSummary,
+        factCheck: sanitizedFactCheck,
+        aiSummary: sanitizedSummary,
         sources: sources
     };
 }
