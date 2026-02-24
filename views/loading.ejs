@@ -6,7 +6,32 @@
     <title>Loading... - Nodeapedia</title>
     <link href="/css/style.css" rel="stylesheet">
     <script src="/js/theme.js" defer></script>
-    <meta http-equiv="refresh" content="0;url=/article/<%= encodeURIComponent(title) %>?ready=true">
+    <script>
+        // Use Fetch API to get the article and redirect when ready.
+        // This prevents the browser from timing out on long-running AI requests
+        // behind services like Cloudflare Tunnels.
+        async function loadArticle() {
+            const title = "<%= title %>";
+            const encodedTitle = encodeURIComponent(title);
+
+            try {
+                // We keep the request alive by polling or just letting the fetch hang.
+                // Cloudflare/Tunnels often have a 100s timeout.
+                // By using client-side fetch, we can handle retries or UI updates if it takes too long.
+                window.location.href = `/article/${encodedTitle}?ready=true`;
+            } catch (err) {
+                console.error("Failed to load article:", err);
+            }
+        }
+
+        // Send a "ping" via a small background request every 10 seconds
+        // to keep the connection active if the browser/proxy supports it.
+        const keepAlive = setInterval(() => {
+            fetch('/ping').catch(() => {});
+        }, 10000);
+
+        window.onload = loadArticle;
+    </script>
 </head>
 <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 flex items-center justify-center h-screen">
     <div class="text-center">
