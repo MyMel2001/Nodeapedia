@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodeapedia</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/theme.js" defer></script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <header class="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Nodeapedia</h1>
+        <button id="theme-toggle" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800">
+            <span id="theme-icon">🌙</span>
+        </button>
+    </header>
+    <main class="max-w-4xl mx-auto mt-20 p-4">
+        <div class="text-center mb-8">
+            <h2 class="text-4xl font-extrabold mb-4">Search Smarter, Not Harder</h2>
+            <p class="text-gray-600 dark:text-gray-400">Fact-checked Wikipedia articles at your fingertips.</p>
+        </div>
+        <form action="/search" method="GET" class="flex gap-2">
+            <input type="text" name="q" placeholder="Search Wikipedia..." required
+                class="flex-1 p-4 rounded-lg border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" class="px-8 py-4 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition">Search</button>
+        </form>
+    </main>
+</body>
+</html>

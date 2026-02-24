@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= article.title %> - Nodeapedia</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/theme.js" defer></script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <header class="p-4 border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-900 z-10">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><a href="/">Nodeapedia</a></h1>
+            <div class="flex gap-4 items-center">
+                <form action="/search" method="GET" class="hidden md:flex">
+                    <input type="text" name="q" placeholder="Search..." class="p-2 border dark:border-gray-700 rounded-l-lg dark:bg-gray-800">
+                    <button type="submit" class="p-2 bg-blue-600 text-white rounded-r-lg">Go</button>
+                </form>
+                <button id="theme-toggle" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        <article class="lg:col-span-2">
+            <h2 class="text-4xl font-extrabold mb-4"><%= article.title %></h2>
+            <% if (article.thumbnail) { %>
+                <img src="<%= article.thumbnail %>" alt="<%= article.title %>" class="rounded-lg mb-6 max-w-full">
+            <% } %>
+            <div class="prose dark:prose-invert max-w-none text-xl leading-relaxed">
+                <%- article.aiSummary.replace(/\n/g, '<br>') %>
+            </div>
+            <div class="mt-8 pt-4 border-t dark:border-gray-700 text-sm text-gray-500">
+                Source: <a href="<%= article.desktopUrl %>" target="_blank" class="text-blue-600 hover:underline">Wikipedia</a>
+            </div>
+        </article>
+
+        <aside class="space-y-6">
+            <section class="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+                <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                    <span>🔗</span> Original Reference
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    This article was generated based on information from Wikipedia.
+                </p>
+                <a href="<%= article.desktopUrl %>" target="_blank" class="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium">
+                    Read on Wikipedia
+                </a>
+            </section>
+
+            <section class="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+                <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                    <span>🔍</span> Fact Check Results
+                </h3>
+                <div class="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                    <%= article.factCheck %>
+                </div>
+                <p class="mt-4 text-xs italic text-yellow-800 dark:text-yellow-400">
+                    AI can make mistakes. Always verify with primary sources.
+                </p>
+            </section>
+
+            <% if (article.sources && article.sources.length > 0) { %>
+                <section class="p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl">
+                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                        <span>📚</span> Sources
+                    </h3>
+                    <ul class="space-y-2 text-sm">
+                        <% article.sources.forEach(source => { %>
+                            <li>
+                                <a href="<%= source.url %>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                    <%= source.title %>
+                                </a>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </section>
+            <% } %>
+        </aside>
+    </main>
+</body>
+</html>

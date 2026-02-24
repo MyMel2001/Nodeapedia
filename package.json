@@ -1,0 +1,38 @@
+{
+  "name": "nodeapedia",
+  "version": "1.0.0",
+  "description": "Wikipedia fact checked by AI and RAG, then brought to you by AI. (Coming soon.)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node src/app.js",
+    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/style.css",
+    "watch:css": "tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MyMel2001/Nodeapedia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MyMel2001/Nodeapedia/issues"
+  },
+  "homepage": "https://github.com/MyMel2001/Nodeapedia#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.24",
+    "axios": "^1.13.5",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.3.1",
+    "duck-duck-scrape": "^2.2.7",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "postcss": "^8.5.6"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
