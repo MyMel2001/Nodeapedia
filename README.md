@@ -26,8 +26,8 @@ Hosting your own instance of Nodeapedia requires a local LLM runner (Ollama) and
 Ensure you have the required models pulled in Ollama:
 
 ```bash
-ollama pull qwen3:4b
-ollama pull deepseek-r1:14b
+ollama pull gemma3:4b
+ollama pull sparksammy/ministral-3-14b-unsloth:small-hotfixed
 ```
 
 ### 2. Installation
