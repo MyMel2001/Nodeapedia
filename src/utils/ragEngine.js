@@ -3,8 +3,7 @@ const searchService = require('../services/searchService');
 const scraperService = require('../services/scraperService');
 const ollamaService = require('../services/ollamaService');
 const { marked } = require('marked');
-const createDOMPurify = require('isomorphic-dompurify');
-const DOMPurify = createDOMPurify();
+const DOMPurify = require('isomorphic-dompurify');
 require('dotenv').config();
 
 const MODEL_FACT_CHECK = process.env.MODEL_FACT_CHECK || 'qwen3:4b';
