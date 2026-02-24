@@ -7,30 +7,38 @@
     <link href="/css/style.css" rel="stylesheet">
     <script src="/js/theme.js" defer></script>
     <script>
-        // Use Fetch API to get the article and redirect when ready.
-        // This prevents the browser from timing out on long-running AI requests
-        // behind services like Cloudflare Tunnels.
-        async function loadArticle() {
+        async function initLoading() {
             const title = "<%= title %>";
             const encodedTitle = encodeURIComponent(title);
 
+            // 1. Tell the server to start processing in the background
             try {
-                // We keep the request alive by polling or just letting the fetch hang.
-                // Cloudflare/Tunnels often have a 100s timeout.
-                // By using client-side fetch, we can handle retries or UI updates if it takes too long.
-                window.location.href = `/article/${encodedTitle}?ready=true`;
+                await fetch(`/api/job/${encodedTitle}`, { method: 'POST' });
             } catch (err) {
-                console.error("Failed to load article:", err);
+                console.error("Failed to start job:", err);
             }
+
+            // 2. Poll every 3 seconds to see if it's done
+            const pollInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/job/${encodedTitle}`);
+                    const result = await response.json();
+
+                    if (result.status === 'completed') {
+                        clearInterval(pollInterval);
+                        window.location.href = `/article/${encodedTitle}?ready=true`;
+                    } else if (result.status === 'failed') {
+                        clearInterval(pollInterval);
+                        alert("Fact-checking failed. Please try again.");
+                        window.location.href = "/";
+                    }
+                } catch (err) {
+                    console.error("Polling error:", err);
+                }
+            }, 3000);
         }
 
-        // Send a "ping" via a small background request every 10 seconds
-        // to keep the connection active if the browser/proxy supports it.
-        const keepAlive = setInterval(() => {
-            fetch('/ping').catch(() => {});
-        }, 10000);
-
-        window.onload = loadArticle;
+        window.onload = initLoading;
     </script>
 </head>
 <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 flex items-center justify-center h-screen">
