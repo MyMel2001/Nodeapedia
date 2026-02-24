@@ -2,12 +2,10 @@ const wikipediaService = require('../services/wikipediaService');
 const searchService = require('../services/searchService');
 const scraperService = require('../services/scraperService');
 const ollamaService = require('../services/ollamaService');
+const cheerio = require('cheerio');
 const { marked } = require('marked');
 const DOMPurify = require('isomorphic-dompurify');
-const TurndownService = require('turndown');
 require('dotenv').config();
-
-const turndownService = new TurndownService();
 
 const MODEL_FACT_CHECK = process.env.MODEL_FACT_CHECK || 'qwen3:4b';
 const MODEL_SUMMARY = process.env.MODEL_SUMMARY || 'deepseek-r1:14b';
@@ -37,18 +35,21 @@ async function processArticle(title) {
 
     const sources = enrichedResults.map(r => ({ title: r.title, url: r.url }));
 
-    // Convert Wikipedia HTML to Markdown for the LLM
-    const articleMarkdown = turndownService.turndown(article.content);
+    // Extract sidebar (infobox) info from HTML
+    const $ = cheerio.load(article.content);
+    const infobox = $('.infobox').text().trim();
+
+    const combinedArticleText = `SIDEBAR INFO:\n${infobox}\n\nWIKIPEDIA EXTRACT:\n${article.extract}`;
 
     // 4. Fact-checking with smaller model
     const factCheckPrompt = [
         {
             role: 'system',
-            content: 'You are a fact-checker. Compare the Wikipedia article (provided as Markdown) with the provided search results from the web. Identify any discrepancies, missing information, or interesting additional context. Pay special attention to details in the infobox, tables, and full text. If no search results are provided, simply state that you couldn\'t verify the information against the web today.'
+            content: 'You are a fact-checker. Compare the Wikipedia article text and sidebar information with the provided search results from the web. Identify any discrepancies, missing information, or interesting additional context. If no search results are provided, simply state that you couldn\'t verify the information against the web today.'
         },
         {
             role: 'user',
-            content: `Wikipedia Article (Markdown):\n${articleMarkdown}\n\nWeb Search Results:\n${searchContext}\n\nIdentify discrepancies and additional context:`
+            content: `Wikipedia Data:\n${combinedArticleText}\n\nWeb Search Results:\n${searchContext}\n\nIdentify discrepancies and additional context:`
         }
     ];
 
