@@ -27,7 +27,7 @@ Ensure you have the required models pulled in Ollama:
 
 ```bash
 ollama pull gemma3:4b
-ollama pull sparksammy/ministral-3-14b-unsloth:small-hotfixed
+ollama pull deepseek-r1:14b
 ```
 
 ### 2. Installation
