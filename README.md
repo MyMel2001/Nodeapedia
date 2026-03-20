@@ -1,4 +1,4 @@
-# Nodeapedia 🌐🧠
+# Nodeapedia (ARCHIVED, USE [THIS](https://github.com/MyMel2001/object-disarray) INSTEAD!)
 
 **Nodeapedia** is an AI-powered Wikipedia reimagining. It takes traditional Wikipedia articles and enhances them using a Retrieval-Augmented Generation (RAG) engine. Instead of just reading a static entry, you get an AI-generated synthesis that is cross-referenced against live web search results to identify discrepancies, missing context, and interesting additional facts.
 
